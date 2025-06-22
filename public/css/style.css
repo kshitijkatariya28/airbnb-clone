@@ -1,0 +1,97 @@
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.navbar {
+    height : 4rem;
+}
+
+.fa-compass{
+    color: rgb(240, 48, 48);
+    font-size: 2rem;
+}
+
+.nav-link{
+    color: #222222;
+}
+
+.f-info{
+    display: flex;
+    height: 5rem;
+    background-color: #ebebeb;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: space-evenly;
+    text-align: center;
+}
+
+.f-info-socials,.f-info-links,.f-info-brand{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-info-socials i{
+    font-size: 1.3rem;
+    margin-right: 1rem;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color: #222222;
+}
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+/* cards */
+.card{
+    border: none;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem;
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-body{
+    padding: 0;
+}
+
+.card-text p{
+    font-weight: 400;
+}
+
+/* card decor */
+.card-listing-link{
+    text-decoration: none;
+}
+
+.card-img-overlay{
+   opacity: 0;
+}
+
+.card-img-overlay:hover {
+    opacity: 0.3;
+    background-color: white;
+}
+
+
+.container{
+    flex :1 ;
+}
+
+/* show page */
+.show-img{
+  height:30vh;
+}
+
+.show-btn{
+    display: flex;
+}

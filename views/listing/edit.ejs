@@ -1,0 +1,83 @@
+<% layout("../layouts/boilerplate.ejs") %>
+<body>
+  <div class="row mt-3">
+    <div class="col-8 offset-2">
+      <h3>Edit Details</h3>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            name="title"
+            value="<%= listing.title %>"
+            id="title"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            name="description"
+            type="text"
+            id="description"
+            class="form-control"
+            required
+          >
+<%= listing.description %> </textarea
+          >
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image link</label>
+          <input
+            name="image"
+            type="text"
+            id="image"
+            value="<%= listing.image.url %>"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label for="price" class="form-label">Price</label>
+            <input
+              name="price"
+              id="price"
+              type="number"
+              value="<%= listing.price %>"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3 col-md-8">
+            <label for="location" class="form-label">Location</label>
+            <input
+              name="location"
+              id="location"
+              type="text"
+              value="<%= listing.location %>"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input
+            name="country"
+            id="country"
+            type="text"
+            value="<%= listing.country %>"
+            class="form-control"
+            required
+          />
+        </div>
+        <button class="btn btn-danger">Edit</button>
+      </form>
+    </div>
+  </div>
+</body>
