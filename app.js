@@ -32,6 +32,7 @@ async function main(){
 //delete route
 app.delete("/listings/:id/delete",wrapAsync(async(req,res)=>{
     let {id} = req.params;
+    console.log("hello")
     await Listing.findByIdAndDelete(id)
     res.redirect("/listings")
 }))
