@@ -16,7 +16,7 @@
           <p class="card-text">
             <%= listing.title %> <br />
             <%= listing.description %> <br />
-            &#8377; <%= listing.price.toLocaleString("en-IN") %> <br />
+            &#8377;  <%= listing.price ? listing.price.toLocaleString("en-IN") : 'N/A' %> <br />
             <%= listing.location %> <br />
             <%= listing.country %>
           </p>
@@ -42,6 +42,22 @@
         <button class="btn btn-dark">Delete</button>
         </form>
       </div>
+    </div>
+
+    <div class="col-6 offset-3 mb-3">
+      <hr>
+      <h3>Leave review</h3>
+      <form action="">
+        <div class="mb-3 mt-3">
+        <label for="rating">Rating</label>
+        <input type="range" min="1" max="5" class="form-range" id="rating" name="review[rating]">
+      </div>
+      <div class="mb-3 mt-3">
+        <label for="comment" class="form-label">Comments</label>
+        <textarea  id="comment" class="form-control" rows="5" name="review[comment]"></textarea>
+      </div>
+      <button class="btn btn-outline-dark">Submit</button>
+      </form>
     </div>
   </div>
 </body>
