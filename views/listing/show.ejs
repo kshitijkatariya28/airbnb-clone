@@ -47,7 +47,7 @@
     <div class="col-6 offset-3 mb-3">
       <hr>
       <h3>Leave review</h3>
-      <form action="">
+      <form action="listings/<%= listing._id %>/reviews" method="POST">
         <div class="mb-3 mt-3">
         <label for="rating">Rating</label>
         <input type="range" min="1" max="5" class="form-range" id="rating" name="review[rating]">
