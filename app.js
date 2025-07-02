@@ -7,7 +7,8 @@ const methodOverride = require("method-override")
 const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError.js")
 const wrapAsync = require("./utils/wrapAsync.js")
-const {listingSchema} = require("./schema.js")
+const {listingSchema,reviewSchema} = require("./schema.js")
+const Review = require("./models/review.js")
 
 app.set("view engine","ejs")
 app.set("views",path.join(__dirname,"./views/listing"))
@@ -15,7 +16,6 @@ app.use(express.urlencoded({extended:true}))
 app.use(methodOverride("_method"))
 app.engine("ejs",ejsMate)
 app.use(express.static(path.join(__dirname,"/public")))
-
 
 main()
 .then((res)=>{
@@ -29,6 +29,28 @@ async function main(){
     await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
 }
 
+const validateListing = (req,res,next)=>{
+    const {error} = listingSchema.validate(req.body)
+    console.log(error)
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400,errMsg)
+    }else{
+        next();
+    }
+}
+
+const validateReview = (req,res,next)=>{
+    const {error} = reviewSchema.validate(req.body)
+    console.log(error)
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400,errMsg)
+    }else{
+        next();
+    }
+}
+
 //delete route
 app.delete("/listings/:id/delete",wrapAsync(async(req,res)=>{
     let {id} = req.params;
@@ -36,8 +58,19 @@ app.delete("/listings/:id/delete",wrapAsync(async(req,res)=>{
     res.redirect("/listings")
 }))
 
+//reviews : Post route
+app.post("/listings/:id/reviews",validateReview,wrapAsync(async(req,res)=>{
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+    await newReview.save();
+    console.log(newReview);
+    listing.reviews.push(newReview);
+    await listing.save();
+   res.redirect(`/listings/${req.params.id}`);
+}))
+
 //update route
-app.put("/listings/:id",wrapAsync(async (req,res)=>{
+app.put("/listings/:id",validateListing,wrapAsync(async (req,res)=>{
     let {id} = req.params;
     const updatedListing = req.body;
     await Listing.findByIdAndUpdate(id , updatedListing)
@@ -52,12 +85,7 @@ app.get("/listings/:id/edit",wrapAsync(async (req,res)=>{
 }))
 
 //post route for new listings
-app.post("/listings",wrapAsync(async(req,res)=>{
-    const result = listingSchema.validate(req.body)
-    console.log(result)
-    if(result.error){
-        throw new ExpressError(400,result.error)
-    }
+app.post("/listings",validateListing,wrapAsync(async(req,res)=>{
     let {title,description,image,price,country,location} = req.body
     let newListing = new Listing({
         title : title,
@@ -80,7 +108,7 @@ app.get("/listings/new",(req,res)=>{
 //show route
 app.get("/listings/:id",wrapAsync(async (req,res)=>{
     const {id} = req.params;
-    let listing = await Listing.findById(id)
+    let listing = await Listing.findById(id).populate("reviews");
     res.render("show.ejs",{listing})
 }))
 

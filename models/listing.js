@@ -22,10 +22,10 @@ const listingSchema = new schema({
   price: Number,
   location: String,
   country: String,
-  reviews : {
+  reviews : [{
     type : mongoose.Schema.Types.ObjectId,
     ref : "Review"
-  }
+  }]
 });
 
 const listing = mongoose.model("listing", listingSchema);
