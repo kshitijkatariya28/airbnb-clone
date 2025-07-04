@@ -8,7 +8,7 @@ const ejsMate = require("ejs-mate")
 const ExpressError = require("./utils/ExpressError.js")
 const wrapAsync = require("./utils/wrapAsync.js")
 const {listingSchema,reviewSchema} = require("./schema.js")
-const Review = require("./models/review.js")
+const reviews = require("./routes/review.js")
 const listings = require("./routes/listing.js")
 
 app.set("view engine","ejs")
@@ -30,10 +30,8 @@ async function main(){
     await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
 }
 
-
 app.use("/listings",listings)
-
-
+app.use("/listings/:id/reviews",reviews)
 
 //home route
 app.get("/",async (req,res)=>{
