@@ -8,7 +8,7 @@ const {listingSchema} = require("../schema.js")
 
 const validateListing = (req,res,next)=>{
     const {error} = listingSchema.validate(req.body)
-    console.log(error)
+    console.log("error" + error)
     if(error){
         let errMsg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(400,errMsg)
@@ -32,6 +32,10 @@ router.get("/new",(req,res)=>{
 router.get("/:id",wrapAsync(async (req,res)=>{
     const {id} = req.params;
     let listing = await Listing.findById(id).populate("reviews");
+    if(!listing){
+        req.flash("error","Listing you requested does not exist")
+        res.redirect("/listings")
+    }
     res.render("show.ejs",{listing})
 }))
 
@@ -41,7 +45,9 @@ router.post("/",validateListing,wrapAsync(async(req,res)=>{
     let newListing = new Listing({
         title : title,
         description : description,
-        image : image,
+        image : {filename: "listingimage",
+              url : image.url
+        },
         price : price,
         country : country,
         location : location
@@ -56,6 +62,10 @@ router.post("/",validateListing,wrapAsync(async(req,res)=>{
 router.get("/:id/edit",wrapAsync(async (req,res)=>{
     const {id} = req.params
     let listing = await Listing.findById(id)
+    if(!listing){
+        req.flash("error","Listing you requested does not exist")
+        res.redirect("/listings")
+    }
     res.render("edit.ejs" , {listing})
 }))
 
@@ -63,7 +73,9 @@ router.get("/:id/edit",wrapAsync(async (req,res)=>{
 router.put("/:id",validateListing,wrapAsync(async (req,res)=>{
     let {id} = req.params;
     const updatedListing = req.body;
-    await Listing.findByIdAndUpdate(id , updatedListing)
+    const updatedListings = await Listing.findByIdAndUpdate(id , updatedListing)
+    console.log(updatedListings)
+    req.flash("success","Listing Updated")
     res.redirect("/listings")
 }))
 
@@ -71,7 +83,9 @@ router.put("/:id",validateListing,wrapAsync(async (req,res)=>{
 //delete route
 router.delete("/:id/delete",wrapAsync(async(req,res)=>{
     let {id} = req.params;
-    await Listing.findByIdAndDelete(id)
+    let deletedListing = await Listing.findByIdAndDelete(id)
+    console.log(deletedListing)
+    req.flash("success","Listing Deleted")
     res.redirect("/listings")
 }))
 
