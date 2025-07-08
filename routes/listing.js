@@ -20,12 +20,12 @@ const validateListing = (req,res,next)=>{
 //index route
 router.get("/",wrapAsync(async (req,res)=>{
     let allListings = await Listing.find({})
-    res.render("index.ejs",{allListings})
+    res.render("listing/index.ejs",{allListings})
 }))
 
 //new listings route
 router.get("/new",(req,res)=>{
-    res.render("new.ejs")
+    res.render("listing/new.ejs")
 })
 
 //show route
@@ -36,7 +36,7 @@ router.get("/:id",wrapAsync(async (req,res)=>{
         req.flash("error","Listing you requested does not exist")
         res.redirect("/listings")
     }
-    res.render("show.ejs",{listing})
+    res.render("listing/show.ejs",{listing})
 }))
 
 //post route for new listings
@@ -66,7 +66,7 @@ router.get("/:id/edit",wrapAsync(async (req,res)=>{
         req.flash("error","Listing you requested does not exist")
         res.redirect("/listings")
     }
-    res.render("edit.ejs" , {listing})
+    res.render("listing/edit.ejs" , {listing})
 }))
 
 //update route
